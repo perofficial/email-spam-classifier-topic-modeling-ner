@@ -80,7 +80,7 @@ email-spam-classifier/
 ### 1. Clona la repository
 
 ```bash
-git clone https://github.com/professionai/email-spam-classifier.git
+git clone https://github.com/perofficial/email-spam-classifier-topic-modeling-ner.git
 cd email-spam-classifier
 ```
 
