@@ -1,7 +1,5 @@
 # 📧 Email Spam Classifier
 
-> **ProfessionAI** — Analisi e Classificazione delle Email per la Rilevazione di SPAM
-
 Un sistema end-to-end per classificare email spam/ham, estrarre topic ricorrenti, misurare la distanza semantica tra i due corpora ed identificare le organizzazioni citate nelle email legittime.
 
 ---
