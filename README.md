@@ -81,7 +81,7 @@ email-spam-classifier/
 
 ```bash
 git clone https://github.com/perofficial/email-spam-classifier-topic-modeling-ner.git
-cd email-spam-classifier
+cd email-spam-classifier-topic-modeling-ner
 ```
 
 ### 2. Crea un virtual environment
