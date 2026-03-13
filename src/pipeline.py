@@ -32,6 +32,7 @@ from .semantic_distance import (
     pairwise_mean_cosine_similarity,
 )
 from .ner_extractor import extract_organisations, print_organisations
+from .visualizations import plot_all
 
 
 # ---------------------------------------------------------------------------
@@ -56,6 +57,7 @@ def run_pipeline(
     vectorizer_path: str = DEFAULT_VECTORIZER_PATH,
     num_topics: int = NUM_TOPICS,
     skip_glove: bool = False,
+    output_dir: str = "reports/figures",
 ) -> dict:
     """
     Execute the full analysis pipeline.
@@ -82,26 +84,26 @@ def run_pipeline(
     # ------------------------------------------------------------------
     # 1. Load dataset
     # ------------------------------------------------------------------
-    print("\n[1/5] Loading dataset ...")
+    print("\n[1/6] Loading dataset ...")
     df_raw = pd.read_csv(data_path)
     print(f"      Shape: {df_raw.shape}")
 
     # ------------------------------------------------------------------
     # 2. Preprocessing + classifier training
     # ------------------------------------------------------------------
-    print("\n[2/5] Preprocessing + training classifier ...")
+    print("\n[2/6] Preprocessing + training classifier ...")
     nlp, stop_words = load_nlp_models()
 
     cleaned_texts = [clean_text(t, nlp, stop_words) for t in df_raw["text"]]
     clean_df = pd.DataFrame({"data": cleaned_texts, "target": df_raw["label_num"]})
 
-    model, vectorizer, report = train_classifier(clean_df)
+    model, vectorizer, report, X_test, y_test, y_pred = train_classifier(clean_df)
     save_artifacts(model, vectorizer, model_path, vectorizer_path)
 
     # ------------------------------------------------------------------
     # 3. Topic modeling
     # ------------------------------------------------------------------
-    print("\n[3/5] Topic modeling (LDA) ...")
+    print("\n[3/6] Topic modeling (LDA) ...")
     df_spam = df_raw[df_raw["label_num"] == 1].copy()
     df_ham = df_raw[df_raw["label_num"] == 0].copy()
 
@@ -126,19 +128,38 @@ def run_pipeline(
     topic_sim = None
     mean_sim = None
     if not skip_glove:
-        print("\n[4/5] Computing cosine semantic distances ...")
+        print("\n[4/6] Computing cosine semantic distances ...")
         glove = load_glove()
         topic_sim = topic_cosine_similarity(sentence_spam, sentence_ham, glove)
         mean_sim = pairwise_mean_cosine_similarity(clean_spam, clean_ham, glove)
     else:
-        print("\n[4/5] Skipping GloVe / cosine step (skip_glove=True).")
+        print("\n[4/6] Skipping GloVe / cosine step (skip_glove=True).")
 
     # ------------------------------------------------------------------
     # 5. NER — organisations from ham emails
     # ------------------------------------------------------------------
-    print("\n[5/5] Extracting organisations from HAM emails ...")
+    print("\n[5/6] Extracting organisations from HAM emails ...")
     organisations = extract_organisations(clean_ham, nlp)
     print_organisations(organisations)
+
+    # ------------------------------------------------------------------
+    # 6. Visualizations
+    # ------------------------------------------------------------------
+    print("\n[6/6] Generating performance visualizations ...")
+    viz_paths = plot_all(
+        df_raw=df_raw,
+        model=model,
+        vectorizer=vectorizer,
+        classification_report=report,
+        lda_spam=lda_spam,
+        lda_ham=lda_ham,
+        X_test=X_test,
+        y_test=y_test,
+        y_pred=y_pred,
+        topic_similarity=topic_sim,
+        mean_pairwise_similarity=mean_sim,
+        output_dir=output_dir,
+    )
 
     print("\n✅  Pipeline complete.")
     return {
@@ -150,4 +171,5 @@ def run_pipeline(
         "topic_similarity": topic_sim,
         "mean_pairwise_similarity": mean_sim,
         "organisations": organisations,
+        "viz_paths": viz_paths,
     }

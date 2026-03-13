@@ -95,7 +95,7 @@ def train(
 
     Returns
     -------
-    (model, vectorizer, report_dict)
+    (model, vectorizer, report_dict, X_test, y_test, y_pred)
     """
     sent_train, sent_test, label_train, label_test = train_test_split(
         df[text_col],
@@ -115,7 +115,7 @@ def train(
     report = classification_report(label_test, predictions, output_dict=True)
     print(classification_report(label_test, predictions))
 
-    return model, vectorizer, report
+    return model, vectorizer, report, X_test, label_test, predictions
 
 
 # ---------------------------------------------------------------------------
