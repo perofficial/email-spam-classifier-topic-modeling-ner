@@ -1,5 +1,7 @@
 # 📧 Email Spam Classifier
 
+> **ProfessionAI** — Analisi e Classificazione delle Email per la Rilevazione di SPAM
+
 Un sistema end-to-end per classificare email spam/ham, estrarre topic ricorrenti, misurare la distanza semantica tra i due corpora ed identificare le organizzazioni citate nelle email legittime.
 
 ---
@@ -58,6 +60,8 @@ email-spam-classifier/
 │   ├── mlp_classifier_model.joblib
 │   └── vectorizer.joblib
 │
+├── reports/
+│   └── figures/               # PNG charts generati automaticamente dalla pipeline
 └── notebooks/
     └── spam_filter.ipynb      # Notebook esplorativo originale del Data Scientist
 ```
@@ -196,6 +200,20 @@ Funzioni di pulizia testo condivise da tutti i moduli:
 - `avg_vector()` — vettore medio GloVe di un testo
 - `topic_cosine_similarity()` — similarità tra topic aggregati spam vs ham
 - `pairwise_mean_cosine_similarity()` — media pairwise su tutti i corpora
+
+### `src/visualizations.py`
+Otto grafici generati automaticamente al termine della pipeline e salvati in `reports/figures/`:
+
+| File | Contenuto |
+|------|-----------|
+| `class_distribution.png` | Bilanciamento classi spam / ham |
+| `confusion_matrix.png` | Matrice di confusione |
+| `classification_report.png` | Precision / Recall / F1 per classe |
+| `roc_curve.png` | Curva ROC con AUC score |
+| `training_loss_curve.png` | Loss del MLP durante il training |
+| `topics_spam_topics.png` | Top keyword per topic LDA — spam |
+| `topics_ham_topics.png` | Top keyword per topic LDA — ham |
+| `cosine_similarity.png` | Distanza semantica spam vs ham |
 
 ### `src/ner_extractor.py`
 - `extract_organisations()` — spaCy NER per entità ORG
