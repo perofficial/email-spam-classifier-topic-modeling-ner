@@ -242,7 +242,6 @@ Il dataset è sbilanciato (più HAM che SPAM), situazione tipica nei contesti re
 |---------|--------|
 | Accuracy (test set) | ~98% |
 | F1-score SPAM | ~98% |
-| Topic cosine similarity (spam vs ham aggregato) | ~0.XX |
 | **Average pairwise cosine similarity** | **~0.44** |
 
 La similarità media pairwise di ~0.44 indica un buon boundary semantico tra le due classi. Un valore più basso si otterrebbe con ulteriore tuning del preprocessing.
