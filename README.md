@@ -61,7 +61,7 @@ email-spam-classifier/
 ├── reports/
 │   └── figures/               # PNG charts generati automaticamente dalla pipeline
 └── notebooks/
-    └── spam_filter.ipynb      # Notebook esplorativo originale del Data Scientist
+    └── spam_filter.ipynb      # Notebook esplorativo originale
 ```
 
 ---
@@ -251,7 +251,7 @@ La similarità media pairwise di ~0.44 indica un buon boundary semantico tra le 
 
 ## 📓 Notebook
 
-Il notebook esplorativo originale del Data Scientist è disponibile in:
+Il notebook esplorativo originale è disponibile in:
 
 ```
 notebooks/spam_filter.ipynb
